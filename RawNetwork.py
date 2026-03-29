@@ -1,4 +1,4 @@
-import math
+import time
 import random
 
 epoch_range = 10000
@@ -64,7 +64,9 @@ class Raw_network:
 
 
 model = Raw_network()
+start_time = time.time()
 print(f"start training Raw_network...")
+print()
 
 for epoch in range(epoch_range):
     for item in data:
@@ -76,10 +78,13 @@ for epoch in range(epoch_range):
     if epoch % (epoch_range/10) == 0:
         current_prediction = model.forward(data_input)
         print(f"step {epoch}: prediction = {data_input[0]:.7f} + {data_input[1]:.7f} = {current_prediction:.5f}")
+stop_time = time.time()
+time = stop_time - start_time
 
 test_data = data[0][0]
 test_sum = data[0][1]
 result = model.forward(test_data)
+print(f"the network trained for {time:.5f}s")
 print(f"\nsum:                {test_data[0]:.2f} + {test_data[1]:.2f} = {test_sum:.2f}")
 print(f"network prediction: {test_data[0]:.2f} + {test_data[1]:.2f} = {result:.2f}")
 
