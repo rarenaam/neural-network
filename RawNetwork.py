@@ -69,6 +69,9 @@ print(f"start training Raw_network...")
 print()
 
 for epoch in range(epoch_range):
+
+    random.shuffle(data)
+    
     for item in data:
         data_input = item[0]
         data_target = item[1]
