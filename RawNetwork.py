@@ -1,15 +1,6 @@
 import time
 import random
 
-epoch_range = 10000
-
-data = []
-for i in range(1000):
-    a = random.uniform(0, 10)
-    b = random.uniform(0, 10)
-    data.append([[a, b], a + b])
-
-
 class Raw_network:
     def __init__(self):
         self.w_hidden = [[random.uniform(-1, 1) for _ in range(2)] for _ in range(5)]
@@ -62,34 +53,51 @@ class Raw_network:
                 self.w_hidden[i][1] -= learning_rate * d_hidden * n[1]
                 self.b_hidden[i] -= learning_rate * d_hidden
 
-
 model = Raw_network()
-start_time = time.time()
-print(f"start training Raw_network...")
-print()
 
-for epoch in range(epoch_range):
-
-    random.shuffle(data)
+choise = input("Type 'p' for pretrained or 't' for self training: ")
+if choise.lower() == 'p':
+    model.w_hidden = [[-0.2233787320708149, 0.08372058993517084], [-0.1547591595765616, -0.44099712627194987], [-0.8346030453002322, -0.07329752419394216], [-0.023123247526250248, -0.04212844881688215], [1.033207396147921, 1.0194723983112182]]
+    model.b_hidden = [-0.8236753623884338, 0.0488254015807843, 0.6939556711247872, 0.6384182136955142, -0.720413246448629]
+    model.w_output = [-0.3347480932531945, -0.5666903086783834, -1.9764369509067372e-13, -0.6883360834039357, 0.9524548875967469]
+    model.b_output = 1.1256074104584177
+    print("\n[INFO] neurons loaded")
+else:
     
-    for item in data:
-        data_input = item[0]
-        data_target = item[1]
+    epoch_range = 10000
 
-        model.train(data_input, data_target)
+    data = []
+    for i in range(1000):
+        a = random.uniform(0, 10)
+        b = random.uniform(0, 10)
+        data.append([[a, b], a + b])
 
-    if epoch % (epoch_range/10) == 0:
-        current_prediction = model.forward(data_input)
-        print(f"step {epoch}: prediction = {data_input[0]:.7f} + {data_input[1]:.7f} = {current_prediction:.5f}")
-stop_time = time.time()
-time = stop_time - start_time
+    start_time = time.time()
+    print(f"start training Raw_network...")
+    print()
 
-test_data = data[0][0]
-test_sum = data[0][1]
-result = model.forward(test_data)
-print(f"the network trained for {time:.5f}s")
-print(f"\nsum:                {test_data[0]:.2f} + {test_data[1]:.2f} = {test_sum:.2f}")
-print(f"network prediction: {test_data[0]:.2f} + {test_data[1]:.2f} = {result:.2f}")
+    for epoch in range(epoch_range):
+
+        random.shuffle(data)
+    
+        for item in data:
+            data_input = item[0]
+            data_target = item[1]
+
+            model.train(data_input, data_target)
+
+        if epoch % (epoch_range/10) == 0:
+            current_prediction = model.forward(data_input)
+            print(f"step {epoch}: prediction = {data_input[0]:.7f} + {data_input[1]:.7f} = {current_prediction:.5f}")
+    stop_time = time.time()
+    duration = stop_time - start_time
+
+    test_data = data[0][0]
+    test_sum = data[0][1]
+    result = model.forward(test_data)
+    print(f"the network trained for {duration:.5f}s")
+    print(f"\nsum:                {test_data[0]:.2f} + {test_data[1]:.2f} = {test_sum:.2f}")
+    print(f"network prediction: {test_data[0]:.2f} + {test_data[1]:.2f} = {result:.2f}")
 
 # user input
 while True:
